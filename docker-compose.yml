@@ -1,0 +1,40 @@
+version: "3"
+
+services:
+  lsky-pro:
+    depends_on:
+      - db
+      - redis
+    build: ./
+    container_name: lsky-pro
+    volumes:
+      - "./config:/config"
+    ports:
+      - "80:80"
+    environment:
+      - PUID=501
+      - PGID=20
+      - DB_HOST=db
+      - APP_SERIAL_NO=YOUR_SERIAL_NO
+      - APP_SECRET=YOUR_APP_SECRET
+      - APP_URL=https://your.url.com
+      - REDIS_HOST=redis
+
+  db:
+    image: mariadb:latest
+    container_name: lsky-pro-db
+    volumes:
+      - ./data/db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: lsky-pro
+      MYSQL_DATABASE: lsky-pro
+      MYSQL_USER: lsky-pro
+      MYSQL_PASSWORD: lsky-pro
+
+
+  redis:
+    image: redis:7-alpine
+    container_name: lsky-pro-redis
+    restart: always
+    volumes:
+      - ./data/redis:/data

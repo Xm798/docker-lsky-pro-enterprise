@@ -1,0 +1,47 @@
+#!/usr/bin/with-contenv bash
+# shellcheck shell=bash
+
+mkdir -p \
+    /config/www
+
+if [ -z "$(ls -A /config/www 2>/dev/null)" ]; then
+    echo "Initializing lsky-pro (this can take a while) ..."
+    rsync -rlD --info=progress2 /app/src/ /config/www/
+fi
+
+# Generate .env file
+echo 'Generate .env file'
+ENV_FILE="/config/www/.env"
+
+if [ ! -f ${ENV_FILE} ]; then
+    cp /config/www/.env.example ${ENV_FILE}
+fi
+
+# The required environment variables
+required_vars=("APP_URL" "APP_SERIAL_NO" "APP_SECRET")
+for var in "${required_vars[@]}"; do
+    if [ -z "${!var}" ]; then
+        echo "Error: Environment variable ${var} must be set and cannot be empty."
+        exit 1
+    fi
+done
+
+# Set .env file
+env_vars=("APP_NAME" "APP_ENV" "APP_KEY" "APP_DEBUG" "APP_URL" "APP_SERIAL_NO" "APP_SECRET" "APP_SERVICE_API" "LOG_CHANNEL" "LOG_DEPRECATIONS_CHANNEL" "LOG_LEVEL" "DB_CONNECTION" "DB_HOST" "DB_PORT" "DB_DATABASE" "DB_USERNAME" "DB_PASSWORD" "BROADCAST_DRIVER" "CACHE_DRIVER" "FILESYSTEM_DISK" "QUEUE_CONNECTION" "SESSION_DRIVER" "SESSION_LIFETIME" "MEMCACHED_HOST" "REDIS_HOST" "REDIS_PASSWORD" "REDIS_PORT" "PUSHER_APP_ID" "PUSHER_APP_KEY" "PUSHER_APP_SECRET" "PUSHER_APP_CLUSTER" "MIX_PUSHER_APP_KEY" "MIX_PUSHER_APP_CLUSTER" "IGNITION_SHARING_ENABLED")
+for var in "${env_vars[@]}"; do
+    if [ ! -z "${!var}" ]; then
+        echo "    - Set ${var} to .env file"
+        sed -i "s|^${var}=.*$|${var}=${!var}|" ${ENV_FILE}
+    fi
+done
+
+echo "Lsky-pro initialization completed!"
+
+cd /config/www/
+exec \
+    s6-setuidgid abc php artisan key:generate
+
+# Permissions
+chmod -R 755 /config/www/
+lsiown -R abc:abc \
+    /config
