@@ -12,13 +12,13 @@ services:
     ports:
       - "80:80"
     environment:
-      - PUID=501
-      - PGID=20
-      - DB_HOST=db
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Shanghai
+      - REDIS_HOST=redis
       - APP_SERIAL_NO=YOUR_SERIAL_NO
       - APP_SECRET=YOUR_APP_SECRET
       - APP_URL=https://your.url.com
-      - REDIS_HOST=redis
 
   db:
     image: mariadb:latest

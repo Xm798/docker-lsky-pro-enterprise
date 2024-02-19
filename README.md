@@ -4,8 +4,6 @@
 
 Lsky Pro 企业版的 Docker 镜像。
 
-该镜像基于 [linuxserver.io](https://www.linuxserver.io/) 的 [baseimage-alpine-nginx](https://github.com/linuxserver/docker-baseimage-alpine-nginx) 构建，基于 [Alpine linux](https://alpinelinux.org/)、[Nginx](http://nginx.org/en/) 和 [S6 overlay](https://github.com/just-containers/s6-overlay)， 可以方便地调度任务和设置权限。
-
 ## Usage
 
 > [!TIP]
@@ -28,8 +26,8 @@ services:
     ports:
       - "80:80"
     environment:
-      - PUID=501
-      - PGID=20
+      - PUID=1000
+      - PGID=1000
       - TZ=Asia/Shanghai
       - REDIS_HOST=redis
       - APP_SERIAL_NO=YOUR_SERIAL_NO
@@ -55,7 +53,10 @@ services:
       - ./data/redis:/data
 ```
 
-请克隆本仓库，并将官方下载的 Lsky Pro 企业版代码包重命名为 lsky-pro.zip，放置于仓库根目录下，然后执行本地构建：
+请克隆本仓库，并将官方下载的 Lsky Pro 企业版代码包重命名为 lsky-pro.zip，放置于仓库根目录下，然后执行本地构建。
+
+>[!IMPORTANT]
+> 中国大陆用户可以将`Dockerfile` 中的 `xm798/lsky-pro-enterprise-baseimage:latest` 镜像修改为 `registry.cn-shanghai.aliyuncs.com/lsky-pro-enterprise-baseimage:latest`，以加快构建速度。
 
 ```bash
 docker compose build

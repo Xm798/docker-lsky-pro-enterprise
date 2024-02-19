@@ -1,18 +1,23 @@
 name: Build Docker Image
 
 on:
+  push:
+    branches:
+      - 'base'
   workflow_dispatch:
 
 env:
-  APP_NAME: lsky-pro-enterprise
+  APP_NAME: lsky-pro-enterprise-baseimage
 
 jobs:
   Dockerhub:
-    name: Build Docker Image and Push
+    name: Build Docker Image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: 'base'
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
@@ -49,7 +54,7 @@ jobs:
           context: .
           platforms: |
             linux/amd64
-            linux/arm64/v8
+            linux/arm64
           tags: |
             ${{ env.DOCKERHUB_USER }}/${{ env.APP_NAME }}:latest
             ${{ env.DOCKERHUB_USER }}/${{ env.APP_NAME }}:${{ env.APP_VERSION }}
