@@ -3,8 +3,6 @@ FROM ghcr.io/linuxserver/baseimage-alpine-nginx:3.19
 # set version label
 LABEL maintainer="Cyrus"
 
-COPY lsky-pro.zip /tmp/lsky-pro.zip
-
 RUN \
   echo "**** install runtime packages ****" && \
   apk add --no-cache \
@@ -43,9 +41,6 @@ RUN \
   grep -qxF 'clear_env = no' /etc/php83/php-fpm.d/www.conf || echo 'clear_env = no' >> /etc/php83/php-fpm.d/www.conf && \
   echo "env[PATH] = /usr/local/bin:/usr/bin:/bin" >> /etc/php83/php-fpm.conf && \
   printf "post_max_size = 50M\nupload_max_filesize = 50M" > /etc/php83/conf.d/50_size_limit.ini && \
-  echo "**** install lsky pro ****" && \
-  mkdir -p /app/src/ && \
-  unzip /tmp/lsky-pro.zip -d /app/src/ && \
   echo "**** cleanup ****" && \
   rm -rf /tmp/*
 
