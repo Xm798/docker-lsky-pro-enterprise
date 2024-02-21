@@ -37,11 +37,11 @@ done
 
 echo "Lsky-pro initialization completed!"
 
-cd /config/www/
-exec \
-    s6-setuidgid abc php artisan key:generate
-
 # Permissions
 chmod -R 755 /config/www/
 lsiown -R abc:abc \
     /config
+
+cd /config/www/
+exec \
+    s6-setuidgid abc php artisan key:generate
