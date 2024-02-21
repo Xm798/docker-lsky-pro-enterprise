@@ -16,11 +16,11 @@ version: "3"
 
 services:
   lsky-pro:
-    build: .
-    container_name: lsky-pro
     depends_on:
       - db
       - redis
+    build: ./
+    container_name: lsky-pro
     volumes:
       - "./config:/config"
     ports:
@@ -40,10 +40,16 @@ services:
     volumes:
       - ./data/db:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: YOUR_ROOT_PASSWORD
+      MYSQL_ROOT_PASSWORD: lsky-pro
       MYSQL_DATABASE: lsky-pro
       MYSQL_USER: lsky-pro
-      MYSQL_PASSWORD: YOUR_DATABASE_PASSWORD
+      MYSQL_PASSWORD: lsky-pro
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--su-mysql", "--connect", "--innodb_initialized" ]
+      start_period: 30s
+      interval: 1m
+      timeout: 5s
+      retries: 3
 
   redis:
     image: redis:7-alpine
@@ -51,6 +57,12 @@ services:
     restart: always
     volumes:
       - ./data/redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      start_period: 30s
+      interval: 1m
+      timeout: 5s
+      retries: 3
 ```
 
 请克隆本仓库，并将官方下载的 Lsky Pro 企业版代码包重命名为 lsky-pro.zip，放置于仓库根目录下，然后执行本地构建。
