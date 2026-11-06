@@ -59,4 +59,3 @@ jobs:
             ${{ env.DOCKERHUB_USER }}/${{ env.APP_NAME }}:${{ env.APP_VERSION }}
             ghcr.io/${{ env.GITHUB_USER }}/${{ env.APP_NAME }}:latest
             ghcr.io/${{ env.GITHUB_USER }}/${{ env.APP_NAME }}:${{ env.APP_VERSION }}
-            registry.cn-shanghai.aliyuncs.com/${{ env.ACR_NAMESPACE }}/${{ env.APP_NAME }}:${{ env.APP_VERSION }}
