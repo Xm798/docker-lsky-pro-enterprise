@@ -3,8 +3,15 @@ name: Build Docker Image
 on:
   push:
     branches:
-      - 'base'
+      - 'master'
+    paths:
+      - 'Dockerfile'
+      - 'root/**'
+      - '.github/workflows/build.yml'
   workflow_dispatch:
+  # Picks up PHP and Alpine security releases from the LSIO base.
+  schedule:
+    - cron: '0 20 * * 0'
 
 env:
   APP_NAME: lsky-pro-enterprise-baseimage
@@ -16,8 +23,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: 'base'
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
@@ -52,6 +57,7 @@ jobs:
         with:
           push: true
           context: .
+          target: base
           platforms: |
             linux/amd64
             linux/arm64
