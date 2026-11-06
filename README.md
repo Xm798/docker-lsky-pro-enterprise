@@ -68,7 +68,7 @@ services:
 请克隆本仓库，并将官方下载的 Lsky Pro 企业版代码包重命名为 lsky-pro.zip，放置于仓库根目录下，然后执行本地构建。
 
 > [!NOTE]
-> `Dockerfile` 的 `base` 阶段是运行环境（PHP 8.4，基于 linuxserver.io 的 [baseimage-alpine-nginx](https://github.com/linuxserver/docker-baseimage-alpine-nginx)），由 CI 每周重建并发布为 `xm798/lsky-pro-enterprise-baseimage`；本地构建会在其上加入 `lsky-pro.zip`。
+> `Dockerfile` 的 `base` 阶段是运行环境（PHP 8.4，基于 linuxserver.io 的 [baseimage-alpine-nginx](https://github.com/linuxserver/docker-baseimage-alpine-nginx)），由 CI 构建并发布为 `xm798/lsky-pro-enterprise-baseimage`；本地构建会在其上加入 `lsky-pro.zip`。
 
 ```bash
 docker compose build

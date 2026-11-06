@@ -9,9 +9,6 @@ on:
       - 'root/**'
       - '.github/workflows/build.yml'
   workflow_dispatch:
-  # Picks up PHP and Alpine security releases from the LSIO base.
-  schedule:
-    - cron: '0 20 * * 0'
 
 env:
   APP_NAME: lsky-pro-enterprise-baseimage
